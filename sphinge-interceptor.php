@@ -40,6 +40,7 @@ if (!$config_file_exists) {
  */
 function intercept_error($errno, $errstr, $errfile, $errline) {
     sendError([
+        'website_secret_key' => KEY,
         'type' => $errno,
         'message' => $errstr,
         'file' => $errfile,
@@ -57,6 +58,7 @@ function intercept_fatal_error() {
 
     if (in_array($lastError['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR])) {
         sendError([
+            'website_secret_key' => KEY,
             'type' => $lastError['type'],
             'message' => $lastError['message'],
             'file' => $lastError['file'],
@@ -74,6 +76,7 @@ function intercept_fatal_error() {
  */
 function intercept_uncaught_exception($exception) {
     sendError([
+        'website_secret_key' => KEY,
         'type' => 'Uncaught Exception',
         'message' => $exception->getMessage(),
         'file' => $exception->getFile(),
@@ -91,3 +94,5 @@ function intercept_uncaught_exception($exception) {
 function sendError(array $error) {
     $response = wp_remote_post(SPHINGE_URL.'/api/intercept', ['body' => json_encode($error)]);
 }
+
+fdas
