@@ -94,5 +94,3 @@ function intercept_uncaught_exception($exception) {
 function sendError(array $error) {
     $response = wp_remote_post(SPHINGE_URL.'/api/intercept', ['body' => json_encode($error)]);
 }
-
-fdas
