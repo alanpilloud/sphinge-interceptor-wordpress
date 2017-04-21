@@ -40,7 +40,7 @@ if (!$config_file_exists) {
  */
 function intercept_error($errno, $errstr, $errfile, $errline) {
     sendError([
-        'website_secret_key' => KEY,
+        'website_secret_key' => SPHINGE_KEY,
         'type' => $errno,
         'message' => $errstr,
         'file' => $errfile,
@@ -58,7 +58,7 @@ function intercept_fatal_error() {
 
     if (in_array($lastError['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR])) {
         sendError([
-            'website_secret_key' => KEY,
+            'website_secret_key' => SPHINGE_KEY,
             'type' => $lastError['type'],
             'message' => $lastError['message'],
             'file' => $lastError['file'],
@@ -76,7 +76,7 @@ function intercept_fatal_error() {
  */
 function intercept_uncaught_exception($exception) {
     sendError([
-        'website_secret_key' => KEY,
+        'website_secret_key' => SPHINGE_KEY,
         'type' => 'Uncaught Exception',
         'message' => $exception->getMessage(),
         'file' => $exception->getFile(),
