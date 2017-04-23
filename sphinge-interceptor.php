@@ -8,18 +8,37 @@ Author: Sphinge
 Author URI: https://sphinge.io
 */
 
-// get sphinge config file
-$config_file_exists = include ABSPATH.'sphinge'.DIRECTORY_SEPARATOR.'config.php';
+/**
+ * Intercepts errors and sends them
+ *
+ * @param  [type] $errno   [description]
+ * @param  [type] $errstr  [description]
+ * @param  [type] $errfile [description]
+ * @param  [type] $errline [description]
+ *
+ * @return void
+ */
+function sphinge_interceptor_init() {
+    // Sphinge config file
+    $config_file = ABSPATH.'sphinge'.DIRECTORY_SEPARATOR.'config.php';
 
-if (!$config_file_exists) {
-    add_action('admin_notices', function () {
-        echo '<div class="notice notice-error"><b>Sphinge Interceptor &mdash; </b>'.__('You must install Sphinge for WordPress first and provide your dashboard URL.', 'sphinge').'</div>';
-    });
-} elseif (!defined('SPHINGE_URL')) {
-    add_action('admin_notices', function () {
-        echo '<div class="notice notice-error"><b>Sphinge Interceptor &mdash; </b>'.__('You must provide your dashboard URL.', 'sphinge').'</div>';
-    });
-} else {
+    if (!file_exists($config_file)) {
+        add_action('admin_notices', function () {
+            echo '<div class="notice notice-error"><b>Sphinge Interceptor &mdash; </b>'.__('You must install Sphinge for WordPress first and provide your dashboard URL.', 'sphinge').'</div>';
+        });
+        return false;
+    }
+
+    // include the config file, do it only once because if Sphinge's report is running, the config file has already been loaded.
+    include_once $config_file;
+
+    if (empty(SPHINGE_URL)) {
+        add_action('admin_notices', function () {
+            echo '<div class="notice notice-error"><b>Sphinge Interceptor &mdash; </b>'.__('You must provide your dashboard URL.', 'sphinge').'</div>';
+        });
+        return false;
+    }
+
     /**
      * Everything's fine, let's go and set error handlers
      */
@@ -27,6 +46,9 @@ if (!$config_file_exists) {
     register_shutdown_function('intercept_fatal_error');
     set_exception_handler('intercept_uncaught_exception');
 }
+
+// run the plugin
+sphinge_interceptor_init();
 
 /**
  * Intercepts errors and sends them
