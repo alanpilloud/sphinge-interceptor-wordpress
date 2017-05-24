@@ -3,7 +3,7 @@
 Plugin Name: Sphinge Interceptor
 Plugin URI: https://sphinge.io/extensions/interceptor
 Description: Intercepts errors and sends them to your Sphinge dashboard.
-Version: 1.0.1-beta
+Version: 1.1.0-beta
 Author: Sphinge
 Author URI: https://sphinge.io
 */
