@@ -66,7 +66,8 @@ function intercept_error($errno, $errstr, $errfile, $errline) {
         'type' => $errno,
         'message' => $errstr,
         'file' => $errfile,
-        'line' => $errline
+        'line' => $errline,
+        'url' => (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", 
     ]);
 }
 
@@ -84,7 +85,8 @@ function intercept_fatal_error() {
             'type' => $lastError['type'],
             'message' => $lastError['message'],
             'file' => $lastError['file'],
-            'line' => $lastError['line']
+            'line' => $lastError['line'],
+            'url' => (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", 
         ]);
     }
 }
@@ -102,7 +104,8 @@ function intercept_uncaught_exception($exception) {
         'type' => 'Uncaught Exception',
         'message' => $exception->getMessage(),
         'file' => $exception->getFile(),
-        'line' => $exception->getLine()
+        'line' => $exception->getLine(),
+        'url' => (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", 
     ]);
 }
 
